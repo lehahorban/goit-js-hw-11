@@ -1,4 +1,5 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// import axios from 'axios';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
@@ -8,30 +9,50 @@ const input = document.querySelector("input")
 const gallery = document.querySelector(".gallery")
 const btnLoadMore = document.querySelector(".load-more")
 const KEY = "28091582-4f46659dd3a5179a3fd2eadd3"
+let findImages = ""
+let numberPage = 1
 console.log(form);
 console.log(input);
 console.log(gallery);
 console.log(btnLoadMore);
 
 async function fetchImages(key, find) {
-    return fetch(`https://pixabay.com/api/?key=${key}&q=${find}&image_type=photo&orientation=horizontal&safesearch=true&page=1&per_page=40`).then(response => {
+    return fetch(`https://pixabay.com/api/?key=${key}&q=${find}&image_type=photo&orientation=horizontal&safesearch=true&page=${numberPage}&per_page=4`).then(response => {
         return response.json()
     })
 }
 
-
+function incrementPage() {
+  
+  numberPage += 1
+  return numberPage
+}
 
 form.addEventListener("submit", submitForm)
+btnLoadMore.addEventListener("click", loadMore)
+function loadMore() {
+  console.log(incrementPage());
+  fetchImages(KEY, findImages)
+    .then(response => {
+      
+      renderImages(response.hits)
+      
+    })
+}
 
 function submitForm(e) {
   e.preventDefault()
+  removeMarcup()
   const findToInput = input.value
+  findImages = findToInput
   console.log(findToInput);
 
-  fetchImages(KEY, findToInput)
+  fetchImages(KEY, findImages)
     .then(response => {
       renderImages(response.hits)
-      if (Number(response.status) === 404) {
+      console.log(response);
+      if (response.hits.length === 0) {
+       
                     Notify.failure("Sorry, there are no images matching your search query. Please try again.");
       }
       if (findToInput === "") {
@@ -65,7 +86,7 @@ function renderImages(items) {
   </div>
 </div>`).join("")    
  
-    gallery.insertAdjacentHTML("afterbegin", marcup)
+    gallery.insertAdjacentHTML("beforeend", marcup)
 }
 
 function removeMarcup() {
@@ -78,5 +99,5 @@ gallery.addEventListener("click", showModal)
 
 function showModal(e) { 
     e.preventDefault()
-    const lightbox = new SimpleLightbox('.gallery .photo-card a', { captionsData: "alt", captionDelay: 250 });
+    const lightbox = new SimpleLightbox('.gallery .photo-card a', { captionsData: "alt", captionDelay: 250 }).refresh();
 }

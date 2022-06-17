@@ -18,3 +18,15 @@
 .image {
 object-fit: cover;
 }
+
+.info {
+    display: flex;
+}
+
+.info-item {
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
