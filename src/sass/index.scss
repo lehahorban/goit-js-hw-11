@@ -1,2 +1,20 @@
 @import './common';
 @import './example';
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+   
+}
+
+.photo-card {
+    flex-basis: calc(100% / 4 - 30px);
+    margin: 15px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+            0px 2px 1px rgba(0, 0, 0, 0.2);
+    
+}
+
+.image {
+object-fit: cover;
+}
