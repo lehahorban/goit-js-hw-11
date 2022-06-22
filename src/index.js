@@ -39,13 +39,14 @@ function incrementPage() {
 form.addEventListener("submit", submitForm)
 btnLoadMore.addEventListener("click", loadMore)
 async function loadMore() {
-  console.log(incrementPage());
+  incrementPage()
  const response = await fetchImages(KEY, findImages)
     try {
       renderImages(response.hits)
       if (response.hits < perPage) {
          Notify.warning("We're sorry, but you've reached the end of search results.");
-          btnLoadMore.style.visibility = "hidden"
+        btnLoadMore.style.visibility = "hidden";
+        smoothScroll()
        }
     } catch (error) {
       console.log(error);
@@ -131,8 +132,17 @@ function showModal(e) {
 
 
 
+function smoothScroll() {
+  const { height: cardHeight } = document
+  .querySelector(".gallery")
+  .firstElementChild.getBoundingClientRect();
 
+window.scrollBy({
+  top: cardHeight * 2,
+  behavior: "smooth",
+});
 
+}
 
 
 
