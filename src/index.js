@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-// import axios from 'axios';
+import axios from 'axios';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
@@ -11,13 +11,14 @@ const btnLoadMore = document.querySelector(".load-more")
 const KEY = "28091582-4f46659dd3a5179a3fd2eadd3"
 let findImages = ""
 let numberPage = 1
+let perPage = 40
 console.log(form);
 console.log(input);
 console.log(gallery);
 console.log(btnLoadMore);
 
-async function fetchImages(key, find) {
-    return fetch(`https://pixabay.com/api/?key=${key}&q=${find}&image_type=photo&orientation=horizontal&safesearch=true&page=${numberPage}&per_page=4`).then(response => {
+ function fetchImages(key, find) {
+    return  fetch(`https://pixabay.com/api/?key=${key}&q=${find}&image_type=photo&orientation=horizontal&safesearch=true&page=${numberPage}&per_page=${perPage}`).then(response => {
         return response.json()
     })
 }
@@ -28,15 +29,20 @@ function incrementPage() {
   return numberPage
 }
 
+
+
 form.addEventListener("submit", submitForm)
 btnLoadMore.addEventListener("click", loadMore)
-function loadMore() {
+ function loadMore() {
   console.log(incrementPage());
   fetchImages(KEY, findImages)
     .then(response => {
       
       renderImages(response.hits)
-      
+      if (response.hits < perPage) {
+         Notify.warning("We're sorry, but you've reached the end of search results.");
+          btnLoadMore.style.visibility = "hidden"
+       }
     })
 }
 
@@ -51,13 +57,27 @@ function submitForm(e) {
     .then(response => {
       renderImages(response.hits)
       console.log(response);
+     
+    
+      if (findImages === "") {
+        Notify.failure("Field cannot be empty.")
+        btnLoadMore.style.visibility = "hidden"
+      }
       if (response.hits.length === 0) {
        
-                    Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+        Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+        btnLoadMore.style.visibility = "hidden"
       }
-      if (findToInput === "") {
+      if(findImages !== "" && response.hits.length !== 0 ) {
+        Notify.success(`Hooray! We found ${response.totalHits} images.`)
+        btnLoadMore.style.visibility = "visible";
+      }
+       
+      
+      if (findImages === "") {
         removeMarcup()
       }
+      
     })
   .catch(error => console.log(error))
 }
@@ -101,3 +121,4 @@ function showModal(e) {
     e.preventDefault()
     const lightbox = new SimpleLightbox('.gallery .photo-card a', { captionsData: "alt", captionDelay: 250 }).refresh();
 }
+
