@@ -122,3 +122,4 @@ function showModal(e) {
     const lightbox = new SimpleLightbox('.gallery .photo-card a', { captionsData: "alt", captionDelay: 250 }).refresh();
 }
 
+console.log(object);
