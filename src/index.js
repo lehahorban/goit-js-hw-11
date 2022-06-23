@@ -56,6 +56,9 @@ async function loadMore() {
 async function submitForm(e) {
   e.preventDefault()
   removeMarcup()
+  if (submitForm) {
+    numberPage = 1
+  }
   const findToInput = input.value
   findImages = findToInput
   // console.log(findToInput);
