@@ -11,7 +11,7 @@ const btnLoadMore = document.querySelector(".load-more")
 const KEY = "28091582-4f46659dd3a5179a3fd2eadd3"
 let findImages = ""
 let numberPage = 1
-let perPage = 40
+let perPage = 40;
 console.log(form);
 console.log(input);
 console.log(gallery);
