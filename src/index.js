@@ -105,16 +105,20 @@ function renderImages(items) {
   </a>
   <div class="info">
     <p class="info-item">
-      <b>Likes ${likes}</b>
+    <b class ="info-el">Likes</b>
+      <b class="items">${likes}</b>
     </p>
     <p class="info-item">
-      <b>Views ${views}</b>
+    <b class ="info-el">Views</b>
+      <b class="items">${views}</b>
     </p>
     <p class="info-item">
-      <b>Comments ${comments}</b>
+    <b class ="info-el">Comments</b>
+      <b class="items">${comments}</b>
     </p>
     <p class="info-item">
-      <b>Downloads ${downloads}</b>
+    <b class ="info-el">Downloads</b>
+      <b class="items">${downloads}</b>
     </p>
   </div>
 </div>`).join("")    
