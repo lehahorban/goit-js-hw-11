@@ -98,8 +98,8 @@ async function submitForm(e) {
 
 
 function renderImages(items) {
-    const marcup = items.map(({ largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => 
-       `<div class="photo-card">
+    const marcup = items.map(({ id, largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => 
+       `<div class="photo-card"data-id=${id}>
         <a href = "${largeImageURL}">
   <img class="image" src="${webformatURL}" alt="${tags}" width = "300" height = "300" loading="lazy" />
   </a>
@@ -131,8 +131,28 @@ function removeMarcup() {
 }
 
 gallery.addEventListener("click", showModal)
-
+gallery.addEventListener("click", addLocalStarage)
  
+
+async function addLocalStarage(e) {
+  const isCardMovie = e.target.closest(".photo-card")
+  // console.log(isCardMovie);
+  const galleryId = +isCardMovie.getAttribute("data-id")
+  // console.log(typeof galleryId);
+  const response = await fetchImages(KEY, findImages)
+  const results = response.hits
+  // console.log(results);
+  const resultsObject = results.find(item => item.id === galleryId)
+  console.log(resultsObject);
+  let array = []
+   if (localStorage.getItem('data')) {
+      array = JSON.parse(localStorage.getItem('data')); 
+    }
+    array.push(resultsObject);
+    localStorage.setItem('data', JSON.stringify(array));
+  console.log(array);
+}
+
 
 function showModal(e) { 
     e.preventDefault()
@@ -152,10 +172,6 @@ window.scrollBy({
 });
 
 }
-
-
-
-
 
 
 
